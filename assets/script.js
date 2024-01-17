@@ -29,14 +29,14 @@ function generatePassword() {
 function getPasswordLength() {
   var passwordLength;
   do {
-    var lengthInput = prompt("Enter the desired password length (between 8 and 128 characters):");
+    var lengthInput = prompt("Enter the desired password length (between 8 and 12 characters):");
     if (lengthInput === null) return null; // User canceled
     passwordLength = parseInt(lengthInput, 10);
 
-    if (isNaN(passwordLength) || passwordLength < 8 || passwordLength > 128) {
-      alert("Please enter a valid password length between 8 and 128 characters.");
+    if (isNaN(passwordLength) || passwordLength < 8 || passwordLength > 12) {
+      alert("Please enter a valid password length between 8 and 12 characters.");
     }
-  } while (isNaN(passwordLength) || passwordLength < 8 || passwordLength > 128);
+  } while (isNaN(passwordLength) || passwordLength < 8 || passwordLength > 12);
 
   return passwordLength;
 }
