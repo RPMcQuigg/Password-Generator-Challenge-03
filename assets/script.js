@@ -1,22 +1,62 @@
-const passwordBox = document.getElementById("generator");
-const lenght = 15; 
+var generateBtn = document.querySelector("#generate");
 
-const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const lowerCase = "abcdefghijklmnopqrstuvwxyz";
-const numbers = "0123456789";
-const symbols = "!@#$%^&*?+=";
+generateBtn.addEventListener("click", writePassword);
 
-const allChars = upperCase + lowerCase + numbers + symbols;
+function writePassword() {
+  var password = generatePassword();
+  var passwordText = document.querySelector("#password");
+  passwordText.value = password;
+}
 
-function createPassword(){
-    let generator= "";
-    generator += upperCase[Math.floor(Math.random() * upperCase.length)];
-    generator += lowerCase[Math.floor(Math.random() * lowerCase.length)];
-    generator += numbers[Math.floor(Math.random() * numbers.length)];
-    generator += symbols[Math.floor(Math.random() * symbols.length)];
+function generatePassword() {
+  var passwordLength = getPasswordLength();
+  if (passwordLength === null) return ""; // User canceled
 
-    while(lenght > password.length){
-        generator += allChars[Math.floor(Math.random() * allChars.length)];
+  var includeLowercase = confirm("Include lowercase characters?");
+  var includeUppercase = confirm("Include uppercase characters?");
+  var includeNumeric = confirm("Include numeric characters?");
+  var includeSpecial = confirm("Include special characters?");
+
+  if (!includeLowercase && !includeUppercase && !includeNumeric && !includeSpecial) {
+    alert("Please select at least one character type.");
+    return "";
+  }
+
+  var charSet = buildCharSet(includeLowercase, includeUppercase, includeNumeric, includeSpecial);
+  return generateRandomPassword(charSet, passwordLength);
+}
+
+function getPasswordLength() {
+  var passwordLength;
+  do {
+    var lengthInput = prompt("Enter the desired password length (between 8 and 128 characters):");
+    if (lengthInput === null) return null; // User canceled
+    passwordLength = parseInt(lengthInput, 10);
+
+    if (isNaN(passwordLength) || passwordLength < 8 || passwordLength > 128) {
+      alert("Please enter a valid password length between 8 and 128 characters.");
     }
-    passwordBox.value = generator 
+  } while (isNaN(passwordLength) || passwordLength < 8 || passwordLength > 128);
+
+  return passwordLength;
+}
+
+
+
+function buildCharSet(lower, upper, numeric, special) {
+  var charSet = "";
+  if (lower) charSet += "abcdefghijklmnopqrstuvwxyz";
+  if (upper) charSet += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  if (numeric) charSet += "0123456789";
+  if (special) charSet += "!@#$%^&*()_-+=";
+  return charSet;
+}
+
+function generateRandomPassword(charSet, length) {
+  var password = "";
+  for (var i = 0; i < length; i++) {
+    var randomIndex = Math.floor(Math.random() * charSet.length);
+    password += charSet.charAt(randomIndex);
+  }
+  return password;
 }
